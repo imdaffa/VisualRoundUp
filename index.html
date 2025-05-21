@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E-Wallet Payment</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 100%;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .header {
+            background-color: #4CAF50;
+            color: white;
+            padding: 15px;
+            text-align: center;
+            border-radius: 10px 10px 0 0;
+            position: relative;
+        }
+        
+        .header h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+        
+        .back-button {
+            position: absolute;
+            left: 15px;
+            top: 18px;
+            font-size: 18px;
+        }
+        
+        .payment-card {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+            overflow: hidden;
+        }
+        
+        .merchant-info {
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            align-items: center;
+        }
+        
+        .merchant-logo {
+            width: 40px;
+            height: 40px;
+            background-color: #e0e0e0;
+            border-radius: 50%;
+            margin-right: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+        
+        .merchant-details h3 {
+            margin: 0;
+            font-size: 16px;
+        }
+        
+        .merchant-details p {
+            margin: 5px 0 0;
+            font-size: 14px;
+            color: #666;
+        }
+        
+        .payment-details {
+            padding: 15px;
+        }
+        
+        .item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+        
+        .item-label {
+            color: #666;
+        }
+        
+        .item-value {
+            font-weight: 500;
+        }
+        
+        .divider {
+            height: 1px;
+            background-color: #eee;
+            margin: 10px 0;
+        }
+        
+        .round-up {
+            background-color: #FFF8E1;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border-left: 4px solid #FFC107;
+        }
+        
+        .round-up-highlight {
+            color: #F57C00;
+            font-weight: bold;
+        }
+        
+        .total {
+            font-size: 18px;
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+            margin-top: 15px;
+        }
+        
+        .pay-button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 15px;
+            width: 100%;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: bold;
+            margin-top: 20px;
+            cursor: pointer;
+        }
+        
+        .pay-button:hover {
+            background-color: #43A047;
+        }
+        
+        .payment-methods {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        
+        .payment-method {
+            background-color: white;
+            border: 1px solid #ddd;
+            padding: 10px 15px;
+            margin: 0 5px;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+        
+        .payment-method.active {
+            border-color: #4CAF50;
+            color: #4CAF50;
+            font-weight: bold;
+        }
+        
+        .animation-container {
+            position: relative;
+            height: 40px;
+            overflow: hidden;
+            margin: 15px 0;
+        }
+        
+        .original-price, .rounded-price {
+            position: absolute;
+            width: 100%;
+            text-align: right;
+            transition: all 0.5s ease;
+        }
+        
+        .original-price {
+            font-size: 18px;
+            font-weight: bold;
+            top: 0;
+        }
+        
+        .rounded-price {
+            font-size: 20px;
+            font-weight: bold;
+            color: #4CAF50;
+            top: 40px;
+        }
+        
+        .animate-price {
+            animation: priceChange 2s forwards;
+        }
+        
+        @keyframes priceChange {
+            0% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+            40% {
+                opacity: 0;
+                transform: translateY(-40px);
+            }
+            60% {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .countdown {
+            color: #999;
+            text-align: center;
+            margin-top: 20px;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <span class="back-button">←</span>
+            <h1>Pembayaran</h1>
+        </div>
+        
+        <div class="payment-card">
+            <div class="merchant-info">
+                <div class="merchant-logo">M</div>
+                <div class="merchant-details">
+                    <h3>Mini Market Sejahtera</h3>
+                    <p>Jl. Pahlawan No. 123</p>
+                </div>
+            </div>
+            
+            <div class="payment-details">
+                <div class="item">
+                    <span class="item-label">Subtotal</span>
+                    <span class="item-value">Rp10.300</span>
+                </div>
+                
+                <div class="divider"></div>
+                
+                <div class="round-up">
+                    <div style="display: flex; align-items: flex-start;">
+                        <input type="checkbox" id="donationCheckbox" checked style="margin-top: 4px; margin-right: 10px; transform: scale(1.2);">
+                        <div>
+                            <p style="margin-top: 0;">Saya setuju untuk menyumbangkan pembulatan <span class="round-up-highlight">Rp<span id="roundupAmount">700</span></span> untuk bantuan bencana melalui <span class="round-up-highlight">Round-Up for Relief</span>.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="animation-container">
+                    <div id="originalPrice" class="original-price">Rp10.300</div>
+                    <div id="roundedPrice" class="rounded-price">Rp11.000</div>
+                </div>
+                
+                <div class="total">
+                    <span>Total Pembayaran</span>
+                    <span id="totalAmount">Rp11.000</span>
+                </div>
+                
+                <button class="pay-button" id="payButton">Bayar Sekarang</button>
+            </div>
+        </div>
+        
+        <div class="payment-methods">
+            <div class="payment-method active">E-Wallet</div>
+            <div class="payment-method">QRIS</div>
+            <div class="payment-method">Transfer</div>
+        </div>
+        
+        <div class="countdown">
+            Waktu pembayaran tersisa: 9:59
+        </div>
+    </div>
+
+    <script>
+        // Animation for price change
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(function() {
+                document.getElementById('originalPrice').style.top = '-40px';
+                document.getElementById('roundedPrice').style.top = '0';
+            }, 1000);
+            
+            // Donation checkbox functionality
+            document.getElementById('donationCheckbox').addEventListener('change', function() {
+                if(this.checked) {
+                    document.getElementById('roundupAmount').innerText = '700';
+                    document.getElementById('totalAmount').innerText = 'Rp11.000';
+                    document.getElementById('roundedPrice').innerText = 'Rp11.000';
+                } else {
+                    document.getElementById('roundupAmount').innerText = '0';
+                    document.getElementById('totalAmount').innerText = 'Rp10.300';
+                    document.getElementById('roundedPrice').innerText = 'Rp10.300';
+                }
+            });
+            
+            // Simulate clicking the pay button
+            document.getElementById('payButton').addEventListener('click', function() {
+                if(document.getElementById('donationCheckbox').checked) {
+                    this.innerHTML = 'Pembayaran Berhasil ✓';
+                    this.style.backgroundColor = '#43A047';
+                    setTimeout(function() {
+                        alert('Terima kasih! Transaksi berhasil.\nDonasi Rp700 telah disalurkan ke Round-Up for Relief.');
+                    }, 1000);
+                } else {
+                    this.innerHTML = 'Pembayaran Berhasil ✓';
+                    this.style.backgroundColor = '#43A047';
+                    setTimeout(function() {
+                        alert('Terima kasih! Transaksi berhasil.');
+                    }, 1000);
+                }
+            });
+        });
+    </script>
+</body>
+</html>
