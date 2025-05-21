@@ -217,6 +217,133 @@
             margin-top: 20px;
             font-size: 14px;
         }
+        
+        /* Success Page Styles */
+        .success-page {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: white;
+            z-index: 1000;
+            padding: 20px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .checkmark-circle {
+            width: 120px;
+            height: 120px;
+            position: relative;
+            display: inline-block;
+            margin-bottom: 30px;
+        }
+        
+        .checkmark-circle-bg {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background-color: #4CAF50;
+            display: block;
+            transform: scale(0);
+            animation: growCircle 0.5s forwards;
+        }
+        
+        @keyframes growCircle {
+            0% {
+                transform: scale(0);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+        
+        .checkmark {
+            transform: rotate(45deg);
+            position: absolute;
+            top: 45px;
+            left: 45px;
+            width: 30px;
+            height: 60px;
+            border-bottom: 6px solid white;
+            border-right: 6px solid white;
+            animation: checkmarkAnimation 0.8s forwards;
+            opacity: 0;
+        }
+        
+        @keyframes checkmarkAnimation {
+            0% {
+                height: 0;
+                width: 0;
+                opacity: 0;
+            }
+            40% {
+                height: 0;
+                width: 30px;
+                opacity: 1;
+            }
+            100% {
+                height: 60px;
+                width: 30px;
+                opacity: 1;
+            }
+        }
+        
+        .success-title {
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 10px;
+        }
+        
+        .success-message {
+            font-size: 16px;
+            color: #666;
+            margin-bottom: 30px;
+            max-width: 280px;
+        }
+        
+        .donation-info {
+            background-color: #FFF8E1;
+            padding: 15px;
+            border-radius: 8px;
+            max-width: 280px;
+            margin-bottom: 30px;
+            border-left: 4px solid #FFC107;
+            text-align: left;
+        }
+        
+        .receipt-details {
+            width: 280px;
+            padding: 15px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            text-align: left;
+        }
+        
+        .receipt-details-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+        
+        .done-button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 12px 40px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
@@ -276,6 +403,43 @@
             Waktu pembayaran tersisa: 9:59
         </div>
     </div>
+    
+    <!-- Success Page -->
+    <div id="successPage" class="success-page" style="display: none;">
+        <div class="checkmark-circle">
+            <div class="checkmark-circle-bg"></div>
+            <div class="checkmark"></div>
+        </div>
+        
+        <div class="success-title">Pembayaran Berhasil!</div>
+        <div class="success-message">Transaksi Anda telah selesai diproses.</div>
+        
+        <div id="donationInfoSuccess" class="donation-info">
+            <p style="margin-top: 0; margin-bottom: 5px;"><strong>Terima kasih atas donasi Anda!</strong></p>
+            <p style="margin-top: 0; margin-bottom: 0;">Rp700 telah disalurkan untuk bantuan bencana melalui Round-Up for Relief.</p>
+        </div>
+        
+        <div class="receipt-details">
+            <div class="receipt-details-item">
+                <span>ID Transaksi</span>
+                <span>TRX239045723</span>
+            </div>
+            <div class="receipt-details-item">
+                <span>Tanggal</span>
+                <span id="currentDate">21 Mei 2025</span>
+            </div>
+            <div class="receipt-details-item">
+                <span>Metode</span>
+                <span>E-Wallet</span>
+            </div>
+            <div class="receipt-details-item">
+                <span>Total</span>
+                <span id="receiptTotal">Rp11.000</span>
+            </div>
+        </div>
+        
+        <button class="done-button" id="doneButton">Selesai</button>
+    </div>
 
     <script>
         // Animation for price change
@@ -300,20 +464,31 @@
             
             // Simulate clicking the pay button
             document.getElementById('payButton').addEventListener('click', function() {
-                if(document.getElementById('donationCheckbox').checked) {
-                    this.innerHTML = 'Pembayaran Berhasil ✓';
-                    this.style.backgroundColor = '#43A047';
-                    setTimeout(function() {
-                        alert('Terima kasih! Transaksi berhasil.\nDonasi Rp700 telah disalurkan ke Round-Up for Relief.');
-                    }, 1000);
-                } else {
-                    this.innerHTML = 'Pembayaran Berhasil ✓';
-                    this.style.backgroundColor = '#43A047';
-                    setTimeout(function() {
-                        alert('Terima kasih! Transaksi berhasil.');
-                    }, 1000);
-                }
+                const donationMade = document.getElementById('donationCheckbox').checked;
+                const totalAmount = donationMade ? 'Rp11.000' : 'Rp10.300';
+                
+                // Show success page with animation
+                document.getElementById('receiptTotal').innerText = totalAmount;
+                
+                // Show or hide donation info based on checkbox
+                document.getElementById('donationInfoSuccess').style.display = donationMade ? 'block' : 'none';
+                
+                // Display the success page
+                document.getElementById('successPage').style.display = 'flex';
             });
+            
+            // Done button functionality
+            document.getElementById('doneButton').addEventListener('click', function() {
+                // In a real app this would go back to home screen
+                // For demo purposes, we'll just hide the success page
+                document.getElementById('successPage').style.display = 'none';
+            });
+            
+            // Set current date in receipt
+            const months = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+            const now = new Date();
+            const dateString = `${now.getDate()} ${months[now.getMonth()]} ${now.getFullYear()}`;
+            document.getElementById('currentDate').innerText = dateString;
         });
     </script>
 </body>
